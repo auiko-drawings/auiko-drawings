@@ -112,6 +112,59 @@ function LanguageToggle({ lang, setLang, languages }) {
   );
 }
 
+function CircularMenu({ lang, onSelectCategory, activeField }) {
+  const fields = Object.entries(contentByFields);
+  const fieldsTotal = fields.length;
+
+  const radius = 100;
+  const centerX = 470;
+  const centerY = 110;
+
+  return (
+    <div
+      className="circular-menu"
+      style={{
+        position: "relative",
+        width: "80%",
+        height: "80%",
+        margin: "auto auto",
+      }}
+    >
+      {fields.map(([catKey, catArray], i) => {
+        const metaData = catArray[0];
+
+        const angle = (i / fieldsTotal) * 2 * Math.PI - Math.PI / 2;
+        const x = centerX + radius * Math.cos(angle);
+        const y = centerY + radius * Math.sin(angle);
+
+        const isSelected = activeField === catKey;
+
+        return (
+          <div
+            key={catKey}
+            className={`field clickable ${isSelected ? "selected" : ""}`}
+            style={{
+              // position: "absolute",
+              left: `${x}px`,
+              top: `${y}px`,
+              // transform: "translate(-50%, -50%)",
+              cursor: "pointer",
+            }}
+            onClick={() => onSelectCategory(catKey)}
+          >
+            <img
+              src={metaData.fieldImg}
+              alt={metaData.fieldName[lang]}
+              style={{ width: "50px", height: "50px", borderRadius: "50%" }}
+            />
+            <div>{metaData.fieldName[lang]}</div>
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
 function Card({ title, img, text }) {
   return (
     <div
@@ -133,60 +186,6 @@ function Card({ title, img, text }) {
     </div>
   );
 }
-
-function CircularMenu({ lang, onSelectCategory, activeField }) {
-  const categories = Object.entries(contentByFields);
-  const categoriesTotal = categories.length;
-
-  const radius = 180;
-  const centerX = 200;
-  const centerY = 300;
-
-  return (
-    <div
-      className="circular-menu"
-      style={{
-        position: "relative",
-        width: "400px",
-        height: "400",
-        margin: "auto auto",
-      }}
-    >
-      {categories.map(([catKey, catArray], i) => {
-        const metaData = catArray[0];
-
-        const angle = (i / categoriesTotal) * 2 * Math.PI - Math.PI / 2;
-        const x = centerX + radius * Math.cos(angle);
-        const y = centerY + radius * Math.sin(angle);
-
-        const isSelected = activeField === catKey;
-
-        return (
-          <div
-            key={catKey}
-            className={`field clickable ${isSelected ? "selected" : ""}`}
-            style={{
-              position: "absolute",
-              left: `${x}px`,
-              top: `${y}px`,
-              transform: "translate(-50%, -50%)",
-              cursor: "pointer",
-            }}
-            onClick={() => onSelectCategory(catKey)}
-          >
-            <img
-              src={metaData.fieldImg}
-              alt={metaData.fieldName[lang]}
-              style={{ width: "50px", height: "50px", borderRadius: "50%" }}
-            />
-            <div>{metaData.fieldName[lang]}</div>
-          </div>
-        );
-      })}
-    </div>
-  );
-}
-
 function App() {
   const languages = ["en", "es", "fr"];
   const [lang, setLang] = useState(() => {
@@ -194,7 +193,9 @@ function App() {
   });
 
   const [activeField, setActiveField] = useState("sketches");
-  const activeCards = activeField ? contentByFields[activeField].slice(1) : [];
+  const cardsOneFieldActive = activeField
+    ? contentByFields[activeField].slice(1)
+    : [];
 
   return (
     <div className="app-main">
@@ -213,17 +214,16 @@ function App() {
         lang={lang}
         activeField={activeField}
         onSelectCategory={(key) => setActiveField(key)}
-        languages={languages}
       />
-      <hr style={{ margin: "40px 0" }} />
-      <main className="content-section">
+      <hr style={{ border: "none", margin: "160px 0" }} />
+      <main className="title-and-cards">
         <div>
           <h2 style={{ textAlign: "center" }}>
             {contentByFields[activeField][0].fieldName[lang].toUpperCase()}
           </h2>
 
-          <div className="cards-feed">
-            {activeCards.map((card, index) => (
+          <div className="cards-of-one-active-field">
+            {cardsOneFieldActive.map((card, index) => (
               <Card
                 key={index}
                 title={card.name[lang]}

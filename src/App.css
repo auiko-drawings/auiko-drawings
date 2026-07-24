@@ -1,31 +1,23 @@
 /* Container needs relative positioning so absolute children align relative to it */
-.circle-container {
-  position: relative;
-  width: 400px;
-  height: 400px;
-  margin: 0 auto;
-}
-
-.circle-item {
-  position: absolute;
+.card {
+  /* position: absolute; */
   /* This centers the item directly on the (x, y) coordinates */
-  transform: translate(-50%, -50%); 
+  /* transform: translate(-50%, -50%);  */
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
 }
-.circle-item.clickable {
+.field.clickable {
   cursor: pointer;
   transition: transform 0.2s ease;
 }
 
 .field.clickable:hover {
-  transform: translate(-50%, -50%) scale(1.1);
+  transform: translate(-1%, -1%) scale(1.1);
 }
 
-
-.circle-item img {
+.field-clickable img {
   width: 50px;
   height: 50px;
   object-fit: contain;
@@ -39,10 +31,11 @@
   margin-bottom : 50px;
 }
 
+
 .language-button {
   cursor: pointer;
   padding: 10px 10px;
-  border: 1px solid #3f2323;
+  border: 1px solid #e735a6;
   border-radius: 50%;
 }
 
@@ -51,10 +44,15 @@
   color: rgb(139, 130, 194);
 }
 
-
-.content-section {
-  margin-top:68%;
+.circular-menu {
+  justify-content: center;
 }
-.cards-feed {
-margin-top : 2%;
+
+.app-main {
+display: flex;
+  flex-wrap: wrap;             /* Allows items to stack nicely on narrow screens */
+  justify-content: center;     /* Centers all items horizontally */
+  align-items: center;
+  gap: 1rem;                   /* Adds clean spacing between items */
+  width: 100%;
 }
